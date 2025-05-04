@@ -1,14 +1,27 @@
 const Store = require('electron-store');
 const { ipcRenderer } = require('electron');
 const store = new Store();
+// store.clear();
 
 // Initialize workspaces if none exist
 if (!store.has('workspaces')) {
-    store.set('workspaces', [{
-        id: 1,
-        name: 'Workspace 1',
-        tasks: []
-    }]);
+	store.set('workspaces', [
+		{
+			id: 1,
+			name: '1',
+			tasks: []
+		},
+		{
+			id: 2,
+			name: '2',
+			tasks: []
+		},
+		{
+			id: 3,
+			name: '3',
+			tasks: []
+		}
+	]);
     store.set('currentWorkspaceId', 1);
 }
 
@@ -16,18 +29,18 @@ if (!store.has('workspaces')) {
 const currentWorkspaceSpan = document.getElementById('current-workspace');
 const prevWorkspaceBtn = document.getElementById('prev-workspace');
 const nextWorkspaceBtn = document.getElementById('next-workspace');
-const addWorkspaceBtn = document.getElementById('add-workspace');
-const newTaskInput = document.getElementById('new-task');
 const addTaskBtn = document.getElementById('add-task');
 const tasksContainer = document.getElementById('tasks');
 const minimizeBtn = document.getElementById('minimize');
 const closeBtn = document.getElementById('close');
-
-// Handle FAB and task input overlay
-const fab = document.getElementById('add-task-fab');
-const taskInputOverlay = document.getElementById('task-input-overlay');
 const taskInput = document.getElementById('new-task');
-const addTaskButton = document.getElementById('add-task');
+
+
+// // Handle FAB and task input overlay
+// const fab = document.getElementById('add-task-fab');
+// const taskInputOverlay = document.getElementById('task-input-overlay');
+
+// const addTaskButton = document.getElementById('add-task');
 
 // Window Controls
 minimizeBtn.addEventListener('click', () => {
@@ -52,17 +65,9 @@ function setCurrentWorkspaceId(id) {
     updateUI();
 }
 
-function addWorkspace() {
-    const workspaces = getWorkspaces();
-    const newId = workspaces.length > 0 ? Math.max(...workspaces.map(w => w.id)) + 1 : 1;
-    workspaces.push({
-        id: newId,
-        name: `Workspace ${newId}`,
-        tasks: []
-    });
-    store.set('workspaces', workspaces);
-    setCurrentWorkspaceId(newId);
-}
+// function addWorkspace() {
+// 	alert("Maximum of 3 workspaces reached");
+// }
 
 function getCurrentWorkspace() {
     const workspaces = getWorkspaces();
@@ -78,7 +83,6 @@ function updateWorkspaceUI() {
 // Task Management
 function addTask(content) {
     if (!content.trim()) return;
-    
     const workspace = getCurrentWorkspace();
     const newTask = {
         id: Date.now(),
@@ -118,22 +122,14 @@ function editTask(taskId, newContent) {
     }
 }
 
-function editWorkspaceName(newName) {
-    // Only allow emojis
-    const emojiRegex = /^[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F900}-\u{1F9FF}\u{1F1E6}-\u{1F1FF}\u{1F191}-\u{1F251}\u{1F004}\u{1F0CF}\u{1F170}-\u{1F171}\u{1F17E}-\u{1F17F}\u{1F18E}\u{3030}\u{2B50}\u{2B55}\u{2934}-\u{2935}\u{2B05}-\u{2B07}\u{2B1B}-\u{2B1C}\u{3297}\u{3299}\u{303D}\u{00A9}\u{00AE}\u{2122}\u{23F3}\u{24C2}\u{23E9}-\u{23EC}\u{25B6}\u{23F8}-\u{23FA}\u{200D}\u{2640}-\u{2642}\u{2695}-\u{2696}\u{2708}\u{FE0F}\u{1F3FB}-\u{1F3FF}]+$/u;
-    
-    if (!emojiRegex.test(newName)) {
-        alert("Please use only emojis for workspace names");
-        return;
-    }
-
-    const workspace = getCurrentWorkspace();
-    if (workspace) {
-        workspace.name = newName;
-        saveWorkspace(workspace);
-        updateUI();
-    }
-}
+// function editWorkspaceName(newName) {
+//     const workspace = getCurrentWorkspace();
+//     if (workspace) {
+//         workspace.name = newName;
+//         saveWorkspace(workspace);
+//         updateUI();
+//     }
+// }
 
 function saveWorkspace(workspace) {
     const workspaces = getWorkspaces();
@@ -221,8 +217,8 @@ function renderTasks() {
     });
 }
 
-// Event Listeners
-addWorkspaceBtn.addEventListener('click', addWorkspace);
+// // Event Listeners
+// addWorkspaceBtn.addEventListener('click', addWorkspace);
 
 prevWorkspaceBtn.addEventListener('click', () => {
     const workspaces = getWorkspaces();
@@ -242,12 +238,15 @@ nextWorkspaceBtn.addEventListener('click', () => {
     }
 });
 
+
 addTaskBtn.addEventListener('click', () => {
     const taskText = taskInput.value;
     if (taskText) {
         addTask(taskText);
         taskInput.value = '';
-    }
+    }	else {
+			alert("No Task Added")
+		}
 });
 
 taskInput.addEventListener('keypress', (e) => {
@@ -260,37 +259,26 @@ taskInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Workspace name editing
-currentWorkspaceSpan.addEventListener('dblclick', () => {
-    currentWorkspaceSpan.contentEditable = true;
-    currentWorkspaceSpan.focus();
-});
+// // Workspace name editing
+// currentWorkspaceSpan.addEventListener('dblclick', () => {
+//     currentWorkspaceSpan.contentEditable = true;
+//     currentWorkspaceSpan.focus();
+// });
 
-currentWorkspaceSpan.addEventListener('blur', () => {
-    currentWorkspaceSpan.contentEditable = false;
-    editWorkspaceName(currentWorkspaceSpan.textContent);
-});
+// currentWorkspaceSpan.addEventListener('blur', () => {
+//     currentWorkspaceSpan.contentEditable = false;
+//     editWorkspaceName(currentWorkspaceSpan.textContent);
+// });
 
-// Handle FAB and task input overlay
-fab.addEventListener('click', () => {
-    taskInputOverlay.style.display = 'flex';
-    taskInput.focus();
-});
 
-taskInputOverlay.addEventListener('click', (e) => {
-    if (e.target === taskInputOverlay) {
-        taskInputOverlay.style.display = 'none';
-        taskInput.value = '';
-    }
-});
 
-addTaskButton.addEventListener('click', () => {
-    const taskText = taskInput.value;
-    if (taskText) {
-        addTask(taskText);
-        taskInput.value = '';
-    }
-});
+// addTaskButton.addEventListener('click', () => {
+//     const taskText = taskInput.value;
+//     if (taskText) {
+//         addTask(taskText);
+//         taskInput.value = '';
+//     }
+// });
 
 taskInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
@@ -302,52 +290,52 @@ taskInput.addEventListener('keypress', (e) => {
     }
 });
 
-// Workspace Management
-function deleteWorkspace(workspaceId) {
-    const workspaces = getWorkspaces();
-    if (workspaces.length <= 1) {
-        alert("Cannot delete the last workspace");
-        return;
-    }
+// // Workspace Management
+// function deleteWorkspace(workspaceId) {
+//     const workspaces = getWorkspaces();
+//     if (workspaces.length <= 1) {
+//         alert("Cannot delete the last workspace");
+//         return;
+//     }
     
-    const filteredWorkspaces = workspaces.filter(w => w.id !== workspaceId);
-    store.set('workspaces', filteredWorkspaces);
+//     const filteredWorkspaces = workspaces.filter(w => w.id !== workspaceId);
+//     store.set('workspaces', filteredWorkspaces);
     
-    // If we're deleting the current workspace, switch to the first available one
-    if (getCurrentWorkspaceId() === workspaceId) {
-        setCurrentWorkspaceId(filteredWorkspaces[0].id);
-    }
+//     // If we're deleting the current workspace, switch to the first available one
+//     if (getCurrentWorkspaceId() === workspaceId) {
+//         setCurrentWorkspaceId(filteredWorkspaces[0].id);
+//     }
     
-    updateUI();
-}
+//     updateUI();
+// }
 
-// Add delete workspace button event listener
-const deleteWorkspaceBtn = document.getElementById('delete-workspace');
-deleteWorkspaceBtn.addEventListener('click', () => {
-    const currentWorkspace = getCurrentWorkspace();
-    if (currentWorkspace) {
-        deleteWorkspace(currentWorkspace.id);
-    }
-});
+// // Add delete workspace button event listener
+// const deleteWorkspaceBtn = document.getElementById('delete-workspace');
+// deleteWorkspaceBtn.addEventListener('click', () => {
+//     const currentWorkspace = getCurrentWorkspace();
+//     if (currentWorkspace) {
+//         deleteWorkspace(currentWorkspace.id);
+//     }
+// });
 
-// Add function to delete all data
-function deleteAllData() {
-    if (confirm("Are you sure you want to delete all data? This cannot be undone.")) {
-        store.clear();
-        // Reset to initial state
-        store.set('workspaces', [{
-            id: 1,
-            name: '📝',
-            tasks: []
-        }]);
-        store.set('currentWorkspaceId', 1);
-        updateUI();
-    }
-}
+// // Add function to delete all data
+// function deleteAllData() {
+//     if (confirm("Are you sure you want to delete all data? This cannot be undone.")) {
+//         store.clear();
+//         // Reset to initial state
+//         store.set('workspaces', [{
+//             id: 1,
+//             name: '📝',
+//             tasks: []
+//         }]);
+//         store.set('currentWorkspaceId', 1);
+//         updateUI();
+//     }
+// }
 
-// Add delete all data button event listener
-const deleteAllDataBtn = document.getElementById('delete-all-data');
-deleteAllDataBtn.addEventListener('click', deleteAllData);
+// // Add delete all data button event listener
+// const deleteAllDataBtn = document.getElementById('delete-all-data');
+// deleteAllDataBtn.addEventListener('click', deleteAllData);
 
 // Focus handling
 document.addEventListener('focusin', () => {

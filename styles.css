@@ -7,9 +7,9 @@
 :root {
     --bg-color: rgba(255, 255, 255, 0.95);
     --text-color: #000;
-    --border-color: #ffffff00;
+    --border-color: rgba(0, 0, 0, 0.1);
     --hover-bg: rgba(0, 0, 0, 0.05);
-    --primary-color: #007AFF;
+    --primary-color: #3b82f6;
     --success-color: #34c759;
     --danger-color: #ff3b30;
     --shadow-color: rgba(0, 0, 0, 0.0);
@@ -19,7 +19,7 @@
     :root {
         --bg-color: rgba(30, 30, 30, 0.95);
         --text-color: #fff;
-        --border-color: #ffffff00;
+        --border-color: rgba(255, 255, 255, 0.1);
         --hover-bg: rgba(255, 255, 255, 0.05);
         --shadow-color: rgba(0, 0, 0, 0.0);
     }
@@ -33,41 +33,18 @@ body {
 
 .app-container {
     width: 300px;
-    height: 400px;
-    min-width: 250px;
-    min-height: 300px;
-    max-width: 500px;
-    max-height: 600px;
+    height: 450px;
+    min-width: 300px;
+    min-height: 450px;
+    max-width: 300px;
+    max-height: 450px;
     background: var(--bg-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     transition: all 0.3s ease;
-    resize: both;
-}
-
-.app-container:not(:focus-within) {
-    background: rgba(255, 255, 255, 0.0);
-}
-
-.app-container:not(:focus-within) .title-bar,
-.app-container:not(:focus-within) .task-input-container {
-    opacity: 0;
-    transform: translateY(-100%);
-}
-
-.app-container:not(:focus-within):has(.tasks-container:empty) {
-    background: var(--hover-bg);
-}
-
-.app-container:not(:focus-within):hover {
-    background: var(--hover-bg);
-}
-
-.app-container:not(:focus-within):hover .title-bar,
-.app-container:not(:focus-within):hover .task-input-container {
-    opacity: 1;
-    transform: translateY(0);
+		-webkit-app-region: drag;
+		cursor: move;
 }
 
 .title-bar {
@@ -77,7 +54,7 @@ body {
     justify-content: space-between;
     align-items: center;
     -webkit-app-region: drag;
-    transition: all 0.3s ease;
+		cursor: move;
 }
 
 .workspace-switcher {
@@ -89,9 +66,9 @@ body {
 .workspace-switcher button {
     background: none;
     border: none;
-    padding: 6px;
+    padding: 6px 8px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 100px;
     -webkit-app-region: no-drag;
     color: var(--text-color);
     opacity: 0.7;
@@ -106,7 +83,7 @@ body {
 .editable {
     cursor: text;
     padding: 4px 8px;
-    border-radius: 6px;
+    border-radius: 4px;
     font-weight: 500;
 }
 
@@ -123,9 +100,9 @@ body {
 .window-controls button {
     background: none;
     border: none;
-    padding: 6px;
+    padding: 6px 8px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 100px;
     color: var(--text-color);
     opacity: 0.7;
     transition: all 0.2s ease;
@@ -153,6 +130,7 @@ body {
 }
 
 .task {
+		-webkit-app-region: no-drag;
     display: flex;
     align-items: center;
     padding: 8px 12px;
@@ -163,26 +141,20 @@ body {
     margin: 4px 0;
 }
 
-.task:hover {
-    background: var(--hover-bg);
-}
-
 .task.completed {
-    opacity: 0.6;
+    opacity: 0.5;
     text-decoration: line-through;
 }
 
 .task .task-content {
     flex: 1;
+    text-wrap: wrap;
+    overflow-wrap: break-word;
     font-size: 14px;
     cursor: text;
     padding: 4px;
-    border-radius: 6px;
+    border-radius: 4px;
     transition: all 0.2s ease;
-}
-
-.task .task-content:hover {
-    background: var(--hover-bg);
 }
 
 .task .task-actions {
@@ -199,9 +171,9 @@ body {
 .task button {
     background: none;
     border: none;
-    padding: 6px;
+    padding: 6px 8px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 100px;
     color: var(--text-color);
     display: flex;
     align-items: center;
@@ -222,36 +194,13 @@ body {
     color: var(--danger-color);
 }
 
-.fab {
-    position: fixed;
-    bottom: 16px;
-    right: 16px;
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: none;
-    transition: all 0.3s ease;
-    z-index: 1000;
-}
-
-.fab:hover {
-    transform: scale(1.1);
-}
-
 .task-input-container {
+		-webkit-app-region: no-drag;
     background: var(--bg-color);
     padding: 12px;
     display: flex;
     gap: 8px;
     border-top: 1px solid var(--border-color);
-    transition: all 0.3s ease;
 }
 
 .task-input-container input {
@@ -267,11 +216,12 @@ body {
 }
 
 .task-input-container button {
-    padding: 8px;
+    padding: 8px 12px;
+		margin-left: 4px;
     background: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -302,43 +252,3 @@ body {
 ::-webkit-scrollbar-thumb:hover {
     opacity: 0.3;
 }
-
-.deadline-input {
-    width: 100%;
-    margin-top: 8px;
-}
-
-.deadline {
-    font-size: 12px;
-    color: var(--text-color);
-    opacity: 0.7;
-    margin-top: 4px;
-}
-
-.deadline.urgent {
-    color: var(--danger-color);
-}
-
-.bottom-controls {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border-color);
-}
-
-.bottom-controls button {
-    width: 100%;
-    padding: 8px;
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.bottom-controls button:hover {
-    opacity: 0.9;
-} 

@@ -5,10 +5,10 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 300,
-    height: 400,
-    minWidth: 300,
-    minHeight: 400,
+		width: 300,
+		height: 450,
+		minWidth: 300,
+		minHeight: 450,
     frame: false,
     transparent: true,
     alwaysOnTop: true,
@@ -20,7 +20,7 @@ function createWindow() {
   });
 
   mainWindow.loadFile('index.html');
-  mainWindow.setAlwaysOnTop(true, 'floating');
+	mainWindow.setAlwaysOnTop(true, 'status');
   mainWindow.setVisibleOnAllWorkspaces(true);
 
   // Handle window controls

@@ -10,10 +10,8 @@
         <div class="title-bar">
             <div class="workspace-switcher">
                 <button id="prev-workspace"><i class="fas fa-chevron-left"></i></button>
-                <span id="current-workspace" class="editable">1</span>
+                <span id="current-workspace">1</span>
                 <button id="next-workspace"><i class="fas fa-chevron-right"></i></button>
-                <button id="add-workspace"><i class="fas fa-plus"></i></button>
-                <button id="delete-workspace"><i class="fas fa-trash"></i></button>
             </div>
             <div class="window-controls">
                 <button id="minimize"><i class="fas fa-minus"></i></button>
@@ -26,21 +24,10 @@
                 <!-- Tasks will be added here dynamically -->
             </div>
             <div class="task-input-container">
-                <input type="text" id="new-task" placeholder="Add a new task..." autocomplete="off">
+                <input type="text" id="new-task" placeholder="Add a new task..." autocomplete="off" spellcheck="false">
                 <button id="add-task" type="button"><i class="fas fa-plus"></i></button>
             </div>
         </div>
-
-        <!-- <button id="add-task-fab" class="fab">
-            <i class="fas fa-plus"></i>
-        </button> -->
-<!-- 
-        <div id="task-input-overlay" class="task-input-overlay">
-            <div class="task-input-container">
-                <input type="text" id="new-task" placeholder="Add a new task...">
-                <button id="add-task"><i class="fas fa-check"></i></button>
-            </div>
-        </div> -->
     </div>
     <script src="renderer.js"></script>
 </body>
