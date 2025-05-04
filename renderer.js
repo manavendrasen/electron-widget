@@ -1,11 +1,10 @@
-const Store = require('electron-store');
-const { ipcRenderer } = require('electron');
-const store = new Store();
-// store.clear();
+// Remove direct electron-store import
+// const Store = require('electron-store');
+// const store = new Store();
 
 // Initialize workspaces if none exist
-if (!store.has('workspaces')) {
-	store.set('workspaces', [
+if (!window.electron.store.has('workspaces')) {
+	window.electron.store.set('workspaces', [
 		{
 			id: 1,
 			name: '1',
@@ -22,7 +21,7 @@ if (!store.has('workspaces')) {
 			tasks: []
 		}
 	]);
-    store.set('currentWorkspaceId', 1);
+	window.electron.store.set('currentWorkspaceId', 1);
 }
 
 // DOM Elements
@@ -44,24 +43,24 @@ const taskInput = document.getElementById('new-task');
 
 // Window Controls
 minimizeBtn.addEventListener('click', () => {
-    ipcRenderer.send('minimize-window');
+	window.electron.minimize();
 });
 
 closeBtn.addEventListener('click', () => {
-    ipcRenderer.send('close-window');
+	window.electron.close();
 });
 
 // Workspace Management
 function getWorkspaces() {
-    return store.get('workspaces');
+	return window.electron.store.get('workspaces');
 }
 
 function getCurrentWorkspaceId() {
-    return store.get('currentWorkspaceId');
+	return window.electron.store.get('currentWorkspaceId');
 }
 
 function setCurrentWorkspaceId(id) {
-    store.set('currentWorkspaceId', id);
+	window.electron.store.set('currentWorkspaceId', id);
     updateUI();
 }
 
@@ -136,7 +135,7 @@ function saveWorkspace(workspace) {
     const index = workspaces.findIndex(w => w.id === workspace.id);
     if (index !== -1) {
         workspaces[index] = workspace;
-        store.set('workspaces', workspaces);
+			window.electron.store.set('workspaces', workspaces);
     }
 }
 

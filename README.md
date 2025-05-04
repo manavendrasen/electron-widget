@@ -30,6 +30,10 @@ A minimal, elegant desktop sticky notes application built with Electron. The app
 
 ## Installation
 
+### For Users
+Download the latest release for your operating system from the [releases page](https://github.com/yourusername/sticky-notes/releases).
+
+### For Developers
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/sticky-notes.git
@@ -45,6 +49,45 @@ npm install
 ```bash
 npm start
 ```
+
+## Packaging and Distribution
+
+### Prerequisites
+- Node.js and npm installed
+- For Windows builds: Windows 10/11
+- For macOS builds: macOS 10.15 or later
+- For Linux builds: Any modern Linux distribution
+
+### Building the Application
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Build for your current platform:
+```bash
+npm run dist
+```
+
+3. Build for specific platforms:
+```bash
+# Windows
+npm run dist -- --win
+
+# macOS
+npm run dist -- --mac
+
+# Linux
+npm run dist -- --linux
+```
+
+The built applications will be available in the `dist` directory.
+
+### Build Outputs
+- Windows: `.exe` installer and portable version
+- macOS: `.dmg` and `.zip` files
+- Linux: `.AppImage` and `.deb` packages
 
 ## Usage
 
@@ -86,10 +129,18 @@ sticky-notes/
 - Electron
 - HTML/CSS/JavaScript
 - electron-store (for data persistence)
+- electron-builder (for packaging)
 
-### Building for Production
+### Development Commands
 ```bash
-npm run build
+# Start the app in development mode
+npm start
+
+# Build the app for distribution
+npm run dist
+
+# Build without packaging (for testing)
+npm run pack
 ```
 
 ## Contributing
